@@ -55,7 +55,7 @@ class TimedLevelIndicator: NSObject {
         levelIndicator.fillColor = NSColor.systemGreen
         timer = Timer.scheduledTimer(withTimeInterval: DEFAULT_TIME_INTERVAL, repeats: true, block: { _ in
             if self.levelIndicator.doubleValue == 0 {
-                // TODO move mouse when @ 0
+                self.simulateMouseClick()
                 self.levelIndicator.doubleValue = self.levelIndicator.maxValue
             } else {
                 self.levelIndicator.doubleValue -= 1
@@ -63,6 +63,13 @@ class TimedLevelIndicator: NSObject {
         })
         
         return nil
+    }
+    
+    func simulateMouseClick(){
+        let mouseLocation = NSEvent.mouseLocation
+        let clickEvent = CGEvent.init(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        
+        clickEvent?.post(tap: .cghidEventTap)
     }
     
     func stopTimer() -> Error! {
